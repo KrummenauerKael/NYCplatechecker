@@ -15,8 +15,13 @@ function searchForViolations(licensePlate) {
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
-                displaySortingOptions(); // Display sorting options
-                displayViolations(data);
+                let states = getUniqueStates(data);
+                if (states.length > 1) {
+                    askUserToSelectState(states, data);
+                } else {
+                    displaySortingOptions();
+                    displayViolations(data);
+                }
             } else {
                 resultsDiv.innerHTML = 'No violations found for this license plate.';
             }
@@ -25,6 +30,29 @@ function searchForViolations(licensePlate) {
             console.error('Error:', error);
             resultsDiv.innerHTML = 'An error occurred while fetching data.';
         });
+}
+
+function getUniqueStates(data) {
+    const statesSet = new Set();
+    data.forEach(item => {
+        if (item.state) {
+            statesSet.add(item.state);
+        }
+    });
+    return Array.from(statesSet);
+}
+
+function askUserToSelectState(states, data) {
+    let resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '<p>Multiple states found for this license plate. Please select a state:</p>';
+
+    states.forEach(state => {
+        let button = document.createElement('button');
+        button.className = 'state-button';
+        button.textContent = state;
+        button.onclick = () => displayViolations(data.filter(item => item.state === state));
+        resultsDiv.appendChild(button);
+    });
 }
 
 function displayViolations(data) {
