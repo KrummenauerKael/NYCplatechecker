@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicle Violations Lookup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Check for Violations in NYC</h1>
+        <form id="licenseForm">
+            <input type="text" id="licensePlate" placeholder="Enter License Plate" required>
+            <button type="submit">Check Violations</button>
+        </form>
+
+        <!-- Sorting options and results will be dynamically inserted here by the script -->
+
+        <div class="content">
+            <div id="results" class="left-panel"></div>
+            <div class="right-panel">
+                <h2>Totals</h2>
+                <p id="totalViolations">Total Violations: 0</p>
+                <p id="totalAmountDue">Total Amount Due: $0</p>
+                <p id="totalPaymentAmount">Total Payment Amount: $0</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
