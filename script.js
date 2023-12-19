@@ -14,6 +14,8 @@ function searchForViolations(licensePlate) {
     fetch(apiEndpoint)
         .then(response => response.json())
         .then(data => {
+            console.log(`Fetched ${data.length} rows`); // Debugger: Log the number of rows fetched
+
             if (data.length > 0) {
                 let states = getUniqueStates(data);
                 if (states.length > 1) {
