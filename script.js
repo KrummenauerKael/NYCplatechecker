@@ -19,10 +19,10 @@ function searchForViolations(licensePlate) {
             if (data.length > 0) {
                 let states = getUniqueStates(data);
                 if (states.length > 1) {
-                    askUserToSelectState(states, data);
+                    askUserToSelectState(states, data, licensePlate);
                 } else {
                     displaySortingOptions();
-                    displayViolations(data);
+                    displayViolations(data, licensePlate, states[0]);
                 }
             } else {
                 resultsDiv.innerHTML = 'No violations found for this license plate.';
@@ -46,7 +46,7 @@ function getUniqueStates(data) {
     return Array.from(statesSet);
 }
 
-function askUserToSelectState(states, data) {
+function askUserToSelectState(states, data, licensePlate) {
     let resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '<p>Multiple states found for this license plate. Please select a state:</p>';
 
@@ -54,13 +54,19 @@ function askUserToSelectState(states, data) {
         let button = document.createElement('button');
         button.className = 'state-button';
         button.textContent = state;
-        button.onclick = () => displayViolations(data.filter(item => item.state === state));
+        button.onclick = () => displayViolations(data.filter(item => item.state === state), licensePlate, state);
         resultsDiv.appendChild(button);
     });
 }
 
-function displayViolations(data) {
+function displayViolations(data, licensePlate = '', state = '') {
     localStorage.setItem('currentResults', JSON.stringify(data));
+    if (licensePlate) {
+        localStorage.setItem('licensePlate', licensePlate);
+    }
+    if (state) {
+        localStorage.setItem('state', state);
+    }
 
     let totalViolations = data.length;
     let totalAmountDue = data.reduce((sum, violation) => sum + parseFloat(violation.amount_due || 0), 0);
@@ -78,6 +84,16 @@ function displayViolations(data) {
     document.getElementById('totalViolations').textContent = `Total Violations: ${totalViolations}`;
     document.getElementById('totalAmountDue').textContent = `Total Amount Due: $${totalAmountDue.toFixed(2)}`;
     document.getElementById('totalPaymentAmount').textContent = `Total Payment Amount: $${totalPaymentAmount.toFixed(2)}`;
+
+    let plate = licensePlate || localStorage.getItem('licensePlate');
+    let plateState = state || localStorage.getItem('state');
+    if (plate && plateState) {
+        document.getElementById('totalsHeader').textContent = `Totals for plate: ${plate}, ${plateState}`;
+    } else if (plate) {
+        document.getElementById('totalsHeader').textContent = `Totals for plate: ${plate}`;
+    } else {
+        document.getElementById('totalsHeader').textContent = 'Totals';
+    }
 }
 
 function displaySortingOptions() {
@@ -105,7 +121,10 @@ function clearTotals() {
     document.getElementById('totalViolations').textContent = 'Total Violations: 0';
     document.getElementById('totalAmountDue').textContent = 'Total Amount Due: $0';
     document.getElementById('totalPaymentAmount').textContent = 'Total Payment Amount: $0';
+    document.getElementById('totalsHeader').textContent = 'Totals';
     localStorage.removeItem('currentResults');
+    localStorage.removeItem('licensePlate');
+    localStorage.removeItem('state');
 }
 
 function sortResults(sortBy) {
@@ -115,5 +134,7 @@ function sortResults(sortBy) {
     } else if (sortBy === 'amountDue') {
         currentResults.sort((a, b) => parseFloat(b.amount_due) - parseFloat(a.amount_due));
     }
-    displayViolations(currentResults);
+    let plate = localStorage.getItem('licensePlate') || '';
+    let state = localStorage.getItem('state') || '';
+    displayViolations(currentResults, plate, state);
 }
