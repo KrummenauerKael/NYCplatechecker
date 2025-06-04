@@ -26,11 +26,13 @@ function searchForViolations(licensePlate) {
                 }
             } else {
                 resultsDiv.innerHTML = 'No violations found for this license plate.';
+                clearTotals();
             }
         })
         .catch(error => {
             console.error('Error:', error);
             resultsDiv.innerHTML = 'An error occurred while fetching data.';
+            clearTotals();
         });
 }
 
@@ -97,6 +99,13 @@ function removeSortingOptions() {
     if (existingSortOptions) {
         existingSortOptions.remove();
     }
+}
+
+function clearTotals() {
+    document.getElementById('totalViolations').textContent = 'Total Violations: 0';
+    document.getElementById('totalAmountDue').textContent = 'Total Amount Due: $0';
+    document.getElementById('totalPaymentAmount').textContent = 'Total Payment Amount: $0';
+    localStorage.removeItem('currentResults');
 }
 
 function sortResults(sortBy) {
