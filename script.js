@@ -9,7 +9,7 @@ function searchForViolations(licensePlate) {
     resultsDiv.innerHTML = '<div class="empty-state"><div class="empty-state-message">Loading...</div></div>';
     removeControls();
 
-    let apiEndpoint = `https://data.cityofnewyork.us/resource/nc67-uf89.json?plate=${encodeURIComponent(licensePlate)}&$limit=5000`;
+    let apiEndpoint = `https://data.cityofnewyork.us/resource/nc67-uf89.json?plate=${encodeURIComponent(licensePlate)}`;
 
     fetch(apiEndpoint)
         .then(response => response.json())
