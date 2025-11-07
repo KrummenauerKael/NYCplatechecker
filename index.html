@@ -7,33 +7,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>NYC Parking Violations Lookup</h1>
+        <h1>Check for Violations in NYC</h1>
         <form id="licenseForm">
             <input type="text" id="licensePlate" placeholder="Enter License Plate" required>
             <button type="submit">Check Violations</button>
         </form>
 
-        <!-- Controls will be dynamically inserted here -->
-        <div id="controlsContainer"></div>
+        <!-- Sorting options and results will be dynamically inserted here by the script -->
 
         <div class="content">
             <div id="results" class="left-panel"></div>
             <div class="right-panel">
-                <div class="totals-panel">
-                    <h2>Summary</h2>
-                    <div class="total-item">
-                        <div class="total-label">Total Violations</div>
-                        <div id="totalViolations" class="total-value">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-label">Total Amount Due</div>
-                        <div id="totalAmountDue" class="total-value">$0.00</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-label">Total Paid</div>
-                        <div id="totalPaymentAmount" class="total-value">$0.00</div>
-                    </div>
-                </div>
+                <h2>Totals</h2>
+                <p id="totalViolations">Total Violations: 0</p>
+                <p id="totalAmountDue">Total Amount Due: $0</p>
+                <p id="totalPaymentAmount">Total Payment Amount: $0</p>
             </div>
         </div>
     </div>
